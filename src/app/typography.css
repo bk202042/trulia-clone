@@ -1,0 +1,37 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
+
+:root {
+  /* Font Family */
+  --trulia-font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+
+  /* Font Sizes */
+  --trulia-font-xs: 0.75rem;   /* 12px */
+  --trulia-font-sm: 0.875rem;  /* 14px */
+  --trulia-font-base: 1rem;    /* 16px */
+  --trulia-font-md: 1.125rem;  /* 18px */
+  --trulia-font-lg: 1.25rem;   /* 20px */
+  --trulia-font-xl: 1.5rem;    /* 24px */
+  --trulia-font-2xl: 1.875rem; /* 30px */
+  --trulia-font-3xl: 2.25rem;  /* 36px */
+  --trulia-font-4xl: 3rem;     /* 48px */
+
+  /* Font Weights */
+  --trulia-font-light: 300;
+  --trulia-font-regular: 400;
+  --trulia-font-medium: 500;
+  --trulia-font-bold: 700;
+
+  /* Line Heights */
+  --trulia-line-tight: 1.25;
+  --trulia-line-snug: 1.375;
+  --trulia-line-normal: 1.5;
+  --trulia-line-relaxed: 1.625;
+  --trulia-line-loose: 2;
+
+  /* Letter Spacing */
+  --trulia-tracking-tighter: -0.05em;
+  --trulia-tracking-tight: -0.025em;
+  --trulia-tracking-normal: 0;
+  --trulia-tracking-wide: 0.025em;
+  --trulia-tracking-wider: 0.05em;
+}

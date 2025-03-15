@@ -1,0 +1,28 @@
+:root {
+  /* Primary Colors */
+  --trulia-primary: #62269E;
+  --trulia-secondary: #52B7BD;
+  --trulia-tertiary: #E3826C;
+
+  /* Neutral Colors */
+  --trulia-black: #2A2A33;
+  --trulia-dark-gray: #596B82;
+  --trulia-medium-gray: #7D8B9E;
+  --trulia-light-gray: #A7B5CE;
+  --trulia-ultra-light-gray: #E8ECF4;
+  --trulia-white: #FFFFFF;
+
+  /* UI Colors */
+  --trulia-red: #D93F4C;
+  --trulia-green: #3BA676;
+  --trulia-blue: #006AFF;
+
+  /* Background Colors */
+  --trulia-background-light: #F9F9FB;
+  --trulia-background-ultra-light: #FDFDFD;
+
+  /* Shadow */
+  --trulia-shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.07);
+  --trulia-shadow-md: 0 4px 8px rgba(0, 0, 0, 0.1);
+  --trulia-shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
