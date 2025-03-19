@@ -1,3 +1,7 @@
+-- Drop existing tables if they exist
+drop table if exists user_favorites;
+drop table if exists rental_listings;
+
 -- Create rental_listings table
 create table rental_listings (
   id uuid primary key default gen_random_uuid(),
@@ -9,7 +13,7 @@ create table rental_listings (
   neighborhood text,
   monthly_rent numeric not null,
   security_deposit numeric not null,
-  utilities text[] default '{}',
+  utilities text[] default '{}'::text[],
   utilities_cost numeric default 0,
   bedrooms numeric not null,
   bathrooms numeric not null,
@@ -18,7 +22,7 @@ create table rental_listings (
   parking_fee numeric default 0,
   pet_friendly boolean default false,
   pet_deposit numeric default 0,
-  amenities text[] default '{}',
+  amenities text[] default '{}'::text[],
   minimum_lease integer default 12,
   available_date date not null,
   application_fee numeric default 0,
@@ -27,7 +31,7 @@ create table rental_listings (
   contact_email text,
   latitude numeric,
   longitude numeric,
-  nearby_transportation text[] default '{}',
+  nearby_transportation text[] default '{}'::text[],
   created_at timestamp with time zone default now() not null,
   user_id uuid references auth.users(id) on delete set null
 );
@@ -111,7 +115,3 @@ on user_favorites
 for delete
 to authenticated
 using (auth.uid() = user_id);
-
--- Add any custom types needed
--- Example for future use:
--- create type property_type as enum ('apartment', 'house', 'condo', 'townhouse', 'studio');
