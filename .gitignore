@@ -46,10 +46,8 @@ next-env.d.ts
 /.cursor/rules
 
 # docs
-/docs
-docs/property type plan.md
-docs/trulia clone master plan.md
-docs/ui componenents for property type.md
+docs/
+
 
 # cursorignore
 .cursorignore
