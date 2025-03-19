@@ -1,31 +1,12 @@
-import { createServerClient } from '@supabase/ssr';
 import { NextResponse, type NextRequest } from 'next/server';
+import { createMiddlewareSupabaseClient } from '@/lib/supabase';
 
 export async function middleware(request: NextRequest) {
-  let supabaseResponse = NextResponse.next({
+  const response = NextResponse.next({
     request,
   });
 
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        getAll() {
-          return request.cookies.getAll();
-        },
-        setAll(cookiesToSet) {
-          cookiesToSet.forEach(({ name, value, options }) => request.cookies.set(name, value));
-          supabaseResponse = NextResponse.next({
-            request,
-          });
-          cookiesToSet.forEach(({ name, value, options }) =>
-            supabaseResponse.cookies.set(name, value, options)
-          );
-        },
-      },
-    }
-  );
+  const supabase = createMiddlewareSupabaseClient(request, response);
 
   // Do not run code between createServerClient and
   // supabase.auth.getUser(). A simple mistake could make it very hard to debug
@@ -35,15 +16,22 @@ export async function middleware(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  // Example of auth redirects (uncomment and modify as needed)
-  // if (!user && !request.nextUrl.pathname.startsWith('/login')) {
-  //   const url = request.nextUrl.clone();
-  //   url.pathname = '/login';
-  //   return NextResponse.redirect(url);
-  // }
+  // Redirect unauthenticated users to login page for protected routes
+  if (
+    !user &&
+    !request.nextUrl.pathname.startsWith('/login') &&
+    !request.nextUrl.pathname.startsWith('/auth') &&
+    (request.nextUrl.pathname.startsWith('/saved-homes') ||
+     request.nextUrl.pathname.startsWith('/saved-searches') ||
+     request.nextUrl.pathname.startsWith('/account'))
+  ) {
+    const url = request.nextUrl.clone();
+    url.pathname = '/login';
+    return NextResponse.redirect(url);
+  }
 
-  // IMPORTANT: You must return the supabaseResponse object as it is
-  return supabaseResponse;
+  // IMPORTANT: You must return the response object
+  return response;
 }
 
 export const config = {

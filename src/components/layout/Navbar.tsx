@@ -1,14 +1,37 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Menu, X } from "lucide-react";
+import { createBrowserSupabaseClient } from "@/lib/supabase";
+import { Menu, X, User } from "lucide-react";
 
 export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const supabase = createBrowserSupabaseClient();
+
+  useEffect(() => {
+    const checkUser = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      setIsLoggedIn(!!user);
+    };
+
+    checkUser();
+
+    // Set up auth state change listener
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      (event, session) => {
+        setIsLoggedIn(!!session?.user);
+      }
+    );
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [supabase.auth]);
 
   return (
     <header className="border-b border-gray-200 bg-white py-3">
@@ -38,15 +61,40 @@ export default function Navbar() {
         </div>
 
         <div className="hidden lg:flex items-center space-x-4">
-          <Button variant="ghost" className="text-black hover:text-trulia-primary hover:bg-gray-100">
-            Saved Homes
-          </Button>
-          <Button variant="ghost" className="text-black hover:text-trulia-primary hover:bg-gray-100">
-            Saved Searches
-          </Button>
-          <Button variant="outline" className="border-gray-200 text-black hover:bg-gray-100">
-            Sign up or Log in
-          </Button>
+          {isLoggedIn ? (
+            <>
+              <Link href="/saved-homes">
+                <Button variant="ghost" className="text-black hover:text-trulia-primary hover:bg-gray-100">
+                  Saved Homes
+                </Button>
+              </Link>
+              <Link href="/saved-searches">
+                <Button variant="ghost" className="text-black hover:text-trulia-primary hover:bg-gray-100">
+                  Saved Searches
+                </Button>
+              </Link>
+              <Link href="/account">
+                <Button variant="outline" className="border-gray-200 text-black hover:bg-gray-100">
+                  <User className="h-4 w-4 mr-2" />
+                  My Account
+                </Button>
+              </Link>
+            </>
+          ) : (
+            <>
+              <Button variant="ghost" className="text-black hover:text-trulia-primary hover:bg-gray-100" disabled>
+                Saved Homes
+              </Button>
+              <Button variant="ghost" className="text-black hover:text-trulia-primary hover:bg-gray-100" disabled>
+                Saved Searches
+              </Button>
+              <Link href="/login">
+                <Button variant="outline" className="border-gray-200 text-black hover:bg-gray-100">
+                  Sign up or Log in
+                </Button>
+              </Link>
+            </>
+          )}
         </div>
 
         <div className="lg:hidden">
@@ -89,9 +137,22 @@ export default function Navbar() {
                   </Link>
                 </div>
                 <div className="mt-auto pt-4 border-t">
-                  <Button className="w-full bg-trulia-primary hover:bg-trulia-primary/90">
-                    Sign up or Log in
-                  </Button>
+                  {isLoggedIn ? (
+                    <div className="space-y-4">
+                      <Link href="/account" className="w-full">
+                        <Button variant="outline" className="w-full justify-center">
+                          <User className="h-4 w-4 mr-2" />
+                          My Account
+                        </Button>
+                      </Link>
+                    </div>
+                  ) : (
+                    <Link href="/login" className="w-full">
+                      <Button className="w-full bg-trulia-primary hover:bg-trulia-primary/90">
+                        Sign up or Log in
+                      </Button>
+                    </Link>
+                  )}
                 </div>
               </div>
             </SheetContent>
