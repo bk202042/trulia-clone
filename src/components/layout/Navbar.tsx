@@ -63,6 +63,11 @@ export default function Navbar() {
         <div className="hidden lg:flex items-center space-x-4">
           {isLoggedIn ? (
             <>
+              <Link href="/dashboard">
+                <Button variant="ghost" className="text-black hover:text-trulia-primary hover:bg-gray-100">
+                  Dashboard
+                </Button>
+              </Link>
               <Link href="/saved-homes">
                 <Button variant="ghost" className="text-black hover:text-trulia-primary hover:bg-gray-100">
                   Saved Homes
@@ -129,6 +134,11 @@ export default function Navbar() {
                     Mortgage
                   </Link>
                   <div className="border-t my-2"></div>
+                  {isLoggedIn && (
+                    <Link href="/dashboard" className="text-lg px-2 py-2 hover:bg-gray-100 rounded-md">
+                      Dashboard
+                    </Link>
+                  )}
                   <Link href="/saved-homes" className="text-lg px-2 py-2 hover:bg-gray-100 rounded-md">
                     Saved Homes
                   </Link>
