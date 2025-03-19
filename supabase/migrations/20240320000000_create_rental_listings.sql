@@ -13,7 +13,7 @@ create table rental_listings (
   neighborhood text,
   monthly_rent numeric not null,
   security_deposit numeric not null,
-  utilities text[] default '{}'::text[],
+  utilities varchar[],
   utilities_cost numeric default 0,
   bedrooms numeric not null,
   bathrooms numeric not null,
@@ -22,7 +22,7 @@ create table rental_listings (
   parking_fee numeric default 0,
   pet_friendly boolean default false,
   pet_deposit numeric default 0,
-  amenities text[] default '{}'::text[],
+  amenities varchar[],
   minimum_lease integer default 12,
   available_date date not null,
   application_fee numeric default 0,
@@ -31,7 +31,7 @@ create table rental_listings (
   contact_email text,
   latitude numeric,
   longitude numeric,
-  nearby_transportation text[] default '{}'::text[],
+  nearby_transportation varchar[],
   created_at timestamp with time zone default now() not null,
   user_id uuid references auth.users(id) on delete set null
 );
