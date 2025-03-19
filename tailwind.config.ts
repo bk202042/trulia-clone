@@ -10,6 +10,8 @@ export default {
   theme: {
     extend: {
       colors: {
+        'trulia-primary': 'rgb(0, 120, 130)',
+        'trulia-black': '#000',
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
         card: {
@@ -75,5 +77,6 @@ export default {
       },
     }
   },
+  // @ts-ignore
   plugins: [require("tailwindcss-animate")],
 } satisfies Config;

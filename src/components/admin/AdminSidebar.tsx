@@ -35,7 +35,7 @@ export default function AdminSidebar({ user }: AdminSidebarProps) {
 
         <Link
           href="/saved-searches"
-          className="flex items-center py-2 px-3 rounded-md hover:bg-gray-100"
+          className="flex items-center py-2 px-3 rounded-md hover:bg-trulia-primary hover:text-white"
         >
           <Search className="mr-3 h-5 w-5" />
           <span>Saved Searches</span>
@@ -43,7 +43,7 @@ export default function AdminSidebar({ user }: AdminSidebarProps) {
 
         <Link
           href="/saved-homes"
-          className="flex items-center py-2 px-3 rounded-md hover:bg-gray-100"
+          className="flex items-center py-2 px-3 rounded-md hover:bg-trulia-primary hover:text-white"
         >
           <Heart className="mr-3 h-5 w-5" />
           <span>Saved Homes</span>

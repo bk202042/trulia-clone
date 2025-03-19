@@ -66,7 +66,7 @@ export default function Navbar() {
             <Link href="/buy" className="text-trulia-black hover:text-trulia-primary font-medium">
               Buy
             </Link>
-            <Link href="/rent" className="text-trulia-primary hover:text-trulia-primary font-medium">
+            <Link href="/rent" className="text-trulia-primary font-medium">
               Rent
             </Link>
           </div>
@@ -76,18 +76,18 @@ export default function Navbar() {
           {isLoggedIn ? (
             <>
               <Link href="/saved-homes">
-                <Button variant="ghost" className="text-black hover:text-trulia-primary hover:bg-gray-100">
+                <Button variant="ghost" className="text-black hover:text-white hover:bg-trulia-primary">
                   Saved Homes
                 </Button>
               </Link>
               <Link href="/saved-searches">
-                <Button variant="ghost" className="text-black hover:text-trulia-primary hover:bg-gray-100">
+                <Button variant="ghost" className="text-black hover:text-white hover:bg-trulia-primary">
                   Saved Searches
                 </Button>
               </Link>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="outline" className="border-gray-200 text-black hover:bg-gray-100">
+                  <Button variant="outline" className="border-gray-200 text-black hover:text-white hover:bg-trulia-primary">
                     <User className="h-4 w-4 mr-2" />
                     Admin
                   </Button>
@@ -121,14 +121,14 @@ export default function Navbar() {
             </>
           ) : (
             <>
-              <Button variant="ghost" className="text-black hover:text-trulia-primary hover:bg-gray-100" disabled>
+              <Button variant="ghost" className="text-black hover:text-white hover:bg-trulia-primary" disabled>
                 Saved Homes
               </Button>
-              <Button variant="ghost" className="text-black hover:text-trulia-primary hover:bg-gray-100" disabled>
+              <Button variant="ghost" className="text-black hover:text-white hover:bg-trulia-primary" disabled>
                 Saved Searches
               </Button>
               <Link href="/login">
-                <Button variant="outline" className="border-gray-200 text-black hover:bg-gray-100">
+                <Button variant="outline" className="border-gray-200 text-black hover:text-white hover:bg-trulia-primary">
                   Sign up or Log in
                 </Button>
               </Link>
@@ -158,17 +158,17 @@ export default function Navbar() {
                   </Button>
                 </div>
                 <div className="flex flex-col py-6 space-y-4">
-                  <Link href="/buy" className="text-lg px-2 py-2 hover:bg-gray-100 rounded-md">
+                  <Link href="/buy" className="text-lg px-2 py-2 hover:bg-trulia-primary hover:text-white rounded-md">
                     Buy
                   </Link>
-                  <Link href="/rent" className="text-lg px-2 py-2 hover:bg-gray-100 rounded-md">
+                  <Link href="/rent" className="text-lg px-2 py-2 hover:bg-trulia-primary hover:text-white rounded-md">
                     Rent
                   </Link>
                   <div className="border-t my-2"></div>
-                  <Link href="/saved-homes" className="text-lg px-2 py-2 hover:bg-gray-100 rounded-md">
+                  <Link href="/saved-homes" className="text-lg px-2 py-2 hover:bg-trulia-primary hover:text-white rounded-md">
                     Saved Homes
                   </Link>
-                  <Link href="/saved-searches" className="text-lg px-2 py-2 hover:bg-gray-100 rounded-md">
+                  <Link href="/saved-searches" className="text-lg px-2 py-2 hover:bg-trulia-primary hover:text-white rounded-md">
                     Saved Searches
                   </Link>
                 </div>
@@ -177,19 +177,19 @@ export default function Navbar() {
                     <div className="space-y-4">
                       <div className="space-y-2">
                         <Link href="/admin" className="w-full block">
-                          <Button variant="outline" className="w-full justify-start">
+                          <Button variant="outline" className="w-full justify-start hover:bg-trulia-primary hover:text-white">
                             <User className="h-4 w-4 mr-2" />
                             Profile
                           </Button>
                         </Link>
                         <Link href="/saved-searches" className="w-full block">
-                          <Button variant="outline" className="w-full justify-start">
+                          <Button variant="outline" className="w-full justify-start hover:bg-trulia-primary hover:text-white">
                             <Search className="h-4 w-4 mr-2" />
                             Saved Searches
                           </Button>
                         </Link>
                         <Link href="/saved-homes" className="w-full block">
-                          <Button variant="outline" className="w-full justify-start">
+                          <Button variant="outline" className="w-full justify-start hover:bg-trulia-primary hover:text-white">
                             <Heart className="h-4 w-4 mr-2" />
                             Saved Homes
                           </Button>
