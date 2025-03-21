@@ -9,7 +9,7 @@ export async function GET(request: Request) {
     const { data: featuredProperties, error } = await supabase
       .from('rental_listings')
       .select('*')
-      .eq('city', 'Mountain View') // Filter as needed
+      // Removed Mountain View filter to show properties from all cities
       .order('created_at', { ascending: false })
       .limit(4);
 

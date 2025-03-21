@@ -38,7 +38,7 @@ export default function FeaturedProperties() {
       <section className="py-12 bg-gray-50">
         <div className="container-wide">
           <h2 className="text-2xl sm:text-3xl font-semibold text-trulia-black mb-4">
-            Newly listed rentals in Mountain View
+            Newly listed rental properties
           </h2>
           <div className="flex justify-center items-center h-60">
             <div className="animate-pulse text-trulia-primary">Loading properties...</div>
@@ -53,7 +53,7 @@ export default function FeaturedProperties() {
       <section className="py-12 bg-gray-50">
         <div className="container-wide">
           <h2 className="text-2xl sm:text-3xl font-semibold text-trulia-black mb-4">
-            Newly listed rentals in Mountain View
+            Newly listed rental properties
           </h2>
           <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
             Error: {error}
@@ -68,7 +68,7 @@ export default function FeaturedProperties() {
       <section className="py-12 bg-gray-50">
         <div className="container-wide">
           <h2 className="text-2xl sm:text-3xl font-semibold text-trulia-black mb-4">
-            Newly listed rentals in Mountain View
+            Newly listed rental properties
           </h2>
           <p>No properties found in this area. Try expanding your search.</p>
         </div>
@@ -80,8 +80,8 @@ export default function FeaturedProperties() {
     <section className="py-12 bg-gray-50">
       <div className="container-wide">
         <div className="flex justify-between items-center mb-8">
-          <h2 className="text-2xl sm:text-3xl font-semibold text-trulia-black">Newly listed rentals in Mountain View</h2>
-          <Link href="/rentals/mountain-view-ca" className="hidden sm:block text-trulia-primary hover:underline font-medium">
+          <h2 className="text-2xl sm:text-3xl font-semibold text-trulia-black">Newly listed rental properties</h2>
+          <Link href="/rentals" className="hidden sm:block text-trulia-primary hover:underline font-medium">
             See more homes
           </Link>
         </div>
@@ -116,7 +116,7 @@ export default function FeaturedProperties() {
 
         <div className="mt-8 text-center sm:hidden">
           <Link
-            href="/rentals/mountain-view-ca"
+            href="/rentals"
             className="text-trulia-primary hover:underline font-medium inline-flex items-center"
           >
             See more homes
