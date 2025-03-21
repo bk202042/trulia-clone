@@ -1,22 +1,21 @@
 import { NextResponse, type NextRequest } from 'next/server';
-import { createMiddlewareSupabaseClient } from '@/lib/supabase';
+import { createMiddlewareClient } from '@/lib/supabase';
 
 export async function middleware(request: NextRequest) {
-  const response = NextResponse.next({
-    request,
-  });
-
-  const supabase = createMiddlewareSupabaseClient(request, response);
+  // Create a Supabase client and get the response object
+  const { supabase, response } = createMiddlewareClient(request);
 
   // Do not run code between createServerClient and
   // supabase.auth.getUser(). A simple mistake could make it very hard to debug
   // issues with users being randomly logged out.
 
+  // Get the user from the auth session
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
   // Redirect unauthenticated users to login page for protected routes
+
   if (
     !user &&
     !request.nextUrl.pathname.startsWith('/login') &&

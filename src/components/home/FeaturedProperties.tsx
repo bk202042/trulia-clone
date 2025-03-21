@@ -1,76 +1,81 @@
 "use client";
 
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
+import { useState, useEffect } from "react";
 import PropertyCard, { PropertyProps } from "@/components/rental-listings/PropertyCard";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 import Link from "next/link";
-
-// Sample data for featured properties
-const sampleProperties: PropertyProps[] = [
-  {
-    id: "prop-1",
-    imageUrl: "https://images.unsplash.com/photo-1568605114967-8130f3a36994?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-    price: 2200,
-    bedrooms: 1,
-    bathrooms: 1,
-    squareFeet: 650,
-    address: "260 Higdon Ave",
-    city: "Mountain View",
-    state: "CA",
-    zip: "94041",
-    isNew: true,
-    canApplyInstantly: true,
-    isFurnished: true
-  },
-  {
-    id: "prop-2",
-    imageUrl: "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-    price: 6890,
-    bedrooms: 4,
-    bathrooms: 3,
-    squareFeet: 2164,
-    address: "829 Moraga Dr",
-    city: "Mountain View",
-    state: "CA",
-    zip: "94041",
-    isNew: true,
-    isPetFriendly: true,
-    canApplyInstantly: true
-  },
-  {
-    id: "prop-3",
-    imageUrl: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-    price: 4200,
-    bedrooms: 2,
-    bathrooms: 2,
-    squareFeet: 1158,
-    address: "500 W Middlefield Rd #89",
-    city: "Mountain View",
-    state: "CA",
-    zip: "94043",
-    isNew: true,
-    isFurnished: true,
-    canApplyInstantly: true
-  },
-  {
-    id: "prop-4",
-    imageUrl: "https://images.unsplash.com/photo-1592595896551-12b371d546d5?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-    price: 2500,
-    bedrooms: 1,
-    bathrooms: 1,
-    squareFeet: 668,
-    address: "505 Cypress Point Dr #124",
-    city: "Mountain View",
-    state: "CA",
-    zip: "94043",
-    isNew: true,
-    isPetFriendly: true,
-    canApplyInstantly: true
-  }
-];
+import { DbRentalListing } from "@/types/database.types";
 
 export default function FeaturedProperties() {
+  const [properties, setProperties] = useState<DbRentalListing[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchFeaturedProperties = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const response = await fetch('/api/featured-properties');
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.error || 'Failed to fetch featured properties');
+        }
+        const data: DbRentalListing[] = await response.json();
+        setProperties(data);
+      } catch (error) {
+        setError(error instanceof Error ? error.message : 'An unknown error occurred');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchFeaturedProperties();
+  }, []);
+
+  if (loading) {
+    return (
+      <section className="py-12 bg-gray-50">
+        <div className="container-wide">
+          <h2 className="text-2xl sm:text-3xl font-semibold text-trulia-black mb-4">
+            Newly listed rentals in Mountain View
+          </h2>
+          <div className="flex justify-center items-center h-60">
+            <div className="animate-pulse text-trulia-primary">Loading properties...</div>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  if (error) {
+    return (
+      <section className="py-12 bg-gray-50">
+        <div className="container-wide">
+          <h2 className="text-2xl sm:text-3xl font-semibold text-trulia-black mb-4">
+            Newly listed rentals in Mountain View
+          </h2>
+          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
+            Error: {error}
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  if (!properties || properties.length === 0) {
+    return (
+      <section className="py-12 bg-gray-50">
+        <div className="container-wide">
+          <h2 className="text-2xl sm:text-3xl font-semibold text-trulia-black mb-4">
+            Newly listed rentals in Mountain View
+          </h2>
+          <p>No properties found in this area. Try expanding your search.</p>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section className="py-12 bg-gray-50">
       <div className="container-wide">
@@ -82,9 +87,31 @@ export default function FeaturedProperties() {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {sampleProperties.map((property) => (
-            <PropertyCard key={property.id} {...property} />
-          ))}
+          {properties.map((property) => {
+            // Convert database properties to PropertyCard format
+            const propertyCardProps: PropertyProps = {
+              id: property.id,
+              imageUrl:
+                "https://images.unsplash.com/photo-1568605114967-8130f3a36994?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", // Placeholder image
+              price: Number(property.monthly_rent),
+              bedrooms: Number(property.bedrooms),
+              bathrooms: Number(property.bathrooms),
+              squareFeet: Number(property.square_feet),
+              address: property.street_address,
+              city: property.city,
+              state: property.state,
+              zip: property.zip_code,
+              isNew:
+                new Date(property.created_at) >
+                new Date(Date.now() - 7 * 24 * 60 * 60 * 1000), // New if within last 7 days
+              isPetFriendly: property.pet_friendly,
+              isFurnished: property.amenities?.includes("Furnished") || false,
+              hasSpecialOffer: false, // Could implement based on your business logic
+              canApplyInstantly: false, // Could implement based on your business logic
+            };
+
+            return <PropertyCard key={property.id} {...propertyCardProps} />;
+          })}
         </div>
 
         <div className="mt-8 text-center sm:hidden">

@@ -1,65 +1,49 @@
-// This file contains both server and client Supabase clients for different contexts
+// This file contains Supabase clients for different contexts
 
 import { createClient } from '@supabase/supabase-js';
-import { createBrowserClient } from '@supabase/ssr';
-import { createServerClient } from '@supabase/ssr';
+import { createBrowserClient, createServerClient } from '@supabase/ssr';
+import { type CookieOptions } from '@supabase/ssr';
 import { NextRequest, NextResponse } from 'next/server';
+import { Database } from '@/types/database.types';
 
 // For client components
 export function createBrowserSupabaseClient() {
-  return createBrowserClient(
+  return createBrowserClient<Database>(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
   );
 }
 
-// For auth callback routes (works in route.ts files)
-// Note this is NOT for server components that import 'next/headers'
-export function createRouteHandlerClient() {
-  return createClient(
+// For direct client usage in API routes and auth callbacks
+export function createDirectClient() {
+  return createClient<Database>(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
   );
 }
 
 // For middleware
-export function createMiddlewareSupabaseClient(
-  request: NextRequest,
-  response: NextResponse
-) {
-  return createServerClient(
+export function createMiddlewareClient(request: NextRequest) {
+  const response = NextResponse.next({
+    request,
+  });
+
+  const supabase = createServerClient<Database>(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
       cookies: {
-        get(name) {
-          return request.cookies.get(name)?.value;
+        getAll() {
+          return request.cookies.getAll();
         },
-        set(name, value, options) {
-          request.cookies.set({
-            name,
-            value,
-            ...options,
-          });
-          response.cookies.set({
-            name,
-            value,
-            ...options,
-          });
-        },
-        remove(name, options) {
-          request.cookies.set({
-            name,
-            value: '',
-            ...options,
-          });
-          response.cookies.set({
-            name,
-            value: '',
-            ...options,
+        setAll(cookiesToSet) {
+          cookiesToSet.forEach(({ name, value, options }) => {
+            response.cookies.set(name, value, options);
           });
         },
       },
     }
   );
+
+  return { supabase, response };
 }
