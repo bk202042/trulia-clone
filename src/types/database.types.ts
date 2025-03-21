@@ -29,6 +29,48 @@ export interface DbRentalListing {
   nearby_transportation?: string[];
   created_at: string;
   user_id?: string;
+
+  // Office-specific fields
+  property_category?: string;
+  office_type?: string;
+  desk_capacity?: number;
+  meeting_rooms?: number;
+  has_reception?: boolean;
+  internet_speed?: string;
+  office_amenities?: string[];
+  available_hours?: string;
+}
+
+export interface DbOfficeListing {
+  id: string;
+  property_type: string;
+  office_type: string;
+  street_address: string;
+  city: string;
+  state: string;
+  zip_code: string;
+  neighborhood?: string;
+  monthly_rent: number;
+  security_deposit: number;
+  utilities_cost?: number;
+  square_feet: number;
+  desk_capacity: number;
+  meeting_rooms?: number;
+  has_reception?: boolean;
+  internet_speed?: string;
+  parking?: boolean;
+  parking_fee?: number;
+  minimum_lease?: number;
+  available_date: string;
+  available_hours?: string;
+  application_fee?: number;
+  property_management?: string;
+  contact_phone?: string;
+  contact_email?: string;
+  latitude?: number;
+  longitude?: number;
+  created_at: string;
+  user_id?: string;
 }
 
 export type Json =
@@ -74,6 +116,11 @@ export interface Database {
             'id' | 'created_at'
           >
         >
+      }
+      office_listings: {
+        Row: DbOfficeListing
+        Insert: Omit<DbOfficeListing, 'id' | 'created_at'>
+        Update: Partial<Omit<DbOfficeListing, 'id' | 'created_at'>>
       }
     }
     Views: {
