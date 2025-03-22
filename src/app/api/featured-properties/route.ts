@@ -1,26 +1,16 @@
-import { NextResponse } from 'next/server';
-import { createDirectClient } from '@/lib/supabase';
+import { NextRequest } from 'next/server';
+import { createHandler, successResponse } from '@/lib/api/utils/handler';
+import { propertyService } from '@/lib/services/properties/service';
 
-// Using direct Supabase client for API routes
-const supabase = createDirectClient();
+import { z } from 'zod';
+import { validateQuery } from '@/lib/api/middleware/validate';
 
-export async function GET(request: Request) {
-  try {
-    const { data: featuredProperties, error } = await supabase
-      .from('rental_listings')
-      .select('*')
-      // Removed Mountain View filter to show properties from all cities
-      .order('created_at', { ascending: false })
-      .limit(4);
+const featuredQuerySchema = z.object({
+  limit: z.coerce.number().min(1).max(10).default(4)
+});
 
-    if (error) {
-      throw error; // Throw the error for consistent error handling
-    }
-
-    return NextResponse.json(featuredProperties);
-  } catch (error) {
-    console.error("Error fetching featured properties:", error);
-    const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
-    return NextResponse.json({ error: errorMessage }, { status: 500 });
-  }
-}
+export const GET = createHandler(async (request: NextRequest) => {
+  const { limit } = validateQuery(featuredQuerySchema)(request);
+  const featuredProperties = await propertyService.getFeaturedProperties(limit);
+  return successResponse(featuredProperties, { limit });
+});

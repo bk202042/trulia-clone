@@ -1,37 +1,15 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import PropertyCard, { PropertyProps } from "@/components/rental-listings/PropertyCard";
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
 import { DbRentalListing } from "@/types/database.types";
+import { useApi } from "@/lib/hooks/useApi";
 
 export default function FeaturedProperties() {
-  const [properties, setProperties] = useState<DbRentalListing[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    const fetchFeaturedProperties = async () => {
-      setLoading(true);
-      setError(null);
-      try {
-        const response = await fetch('/api/featured-properties');
-        if (!response.ok) {
-          const errorData = await response.json();
-          throw new Error(errorData.error || 'Failed to fetch featured properties');
-        }
-        const data: DbRentalListing[] = await response.json();
-        setProperties(data);
-      } catch (error) {
-        setError(error instanceof Error ? error.message : 'An unknown error occurred');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchFeaturedProperties();
-  }, []);
+  const { data: properties, loading, error } = useApi<DbRentalListing[]>({
+    url: '/api/featured-properties'
+  });
 
   if (loading) {
     return (
